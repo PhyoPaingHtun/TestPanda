@@ -1,0 +1,29 @@
+title: Proxy Execution via fsquirt.exe Loading Control Panel Applet
+id: 9c3b4e21-0f9a-4d8a-bc6a-2e9c6a7b1f01
+status: stable
+description: Detects potential proxy execution by fsquirt.exe through the loading of a Control Panel applet (.cpl) from a non-system directory. This behavior may indicate abuse of implicit CPL resolution to execute code under the context of a trusted Windows binary.
+references:
+    - https://www.trukno.com/dashboard/breach/693ab2b22eb1cb2cb4373c9d
+    - https://unit42.paloaltonetworks.com/hamas-affiliate-ashen-lepus-uses-new-malware-suite-ashtag/
+author: PHYO PAING HTUN
+date: 2026-01-09
+tags:
+    - Detection.Rule
+    - attack.defense-evasion
+    - attack.t1574.002
+logsource:
+    category: image_load
+    product: windows
+detection:
+    selection_image:
+        Image|endswith: '\fsquirt.exe'
+    selection_load:
+        ImageLoaded|endswith: '.cpl'
+    filter_legitimate_path:
+        ImageLoaded|contains:
+            - 'C:\Windows\System32\'
+            - 'C:\Windows\SysWOW64\'
+    condition: all of selection_* and not filter_legitimate_path
+falsepositives:
+    - Unknown
+level: high
