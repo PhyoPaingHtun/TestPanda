@@ -1,138 +1,54 @@
-
-Skip to main content
-Minimize
-Restore
-Close
-
-
-
-New chat
-
-Search
-
-Library
-
-Create
-Agents
-
-
-New agent
-
-All agents
-
-Chats
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-All chats
-
-Apps
-
-Phyo Paing Htun(PhyoPaingHtun@yokogawa.com)
-
-Start M365 Copilot trial
-Copilot Chat (Basic)
-
-Auto
-
-
-
-Today
-image.png
-You said:
-
-Copilot said:
-Copilot
-You’re getting this error because your system is Ubuntu Noble (24.04), but you still have an old Kubernetes repo for Ubuntu Xenial (16.04) configured:
-
-https://apt.kubernetes.io kubernetes-xenial Release
-This repo no longer provides a Release file, so apt refuses to use it.
-
-✅ How to Fix the Issue
-Step 1 — Remove the old, broken Kubernetes repo
-Run:
-
-
-
-
-Shell
-sudo rm /etc/apt/sources.list.d/kubernetes.list
-(or whatever file contains that xenial repo — you can list them using: ls /etc/apt/sources.list.d/)
-
-Alternatively, edit it:
-
-
-
-
-Shell
-sudo nano /etc/apt/sources.list.d/kubernetes.list
-Remove the line:
-
-deb https://apt.kubernetes.io/ kubernetes-xenial main
-Save and exit.
-
-Step 2 — Add the correct Kubernetes repo for your OS (Ubuntu 24.04 Noble)
-Kubernetes now uses a new repo structure (containerd, CRI-O, K8s).
-
-Use the official repo:
-
-
-
-
-Shell
-sudo apt-get install -y apt-transport-https ca-certificates curl
-sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-Step 3 — Update apt again
-
-
-
-Shell
-sudo apt update
-
-This time, no error should appear.
-
-✔️ What Happened?
-Your OS: Ubuntu Noble 24.04
-Old repo: kubernetes-xenial (16.04) → no Release file → apt blocks it.
-
-Removing the old repo fixes the problem immediately.
-
-If you want, I can check your /etc/apt/sources.list.d/ to confirm which file is causing the issue.
-
-
-
-
-
-
-
-
-
-How do I verify the new repo is working?
-
-What if I still see the same error?
-
-Message Copilot
-
-
-Tools
-
-
-AI-generated content may be incorrect
+FIX: Completely clean the namespace and remove Confluent CRDs
+You must remove everything related to Confluent.
+
+STEP 1 — Delete ALL Confluent pods
+Shellkubectl delete pods --all -n kafkaShow more lines
+
+STEP 2 — Delete ALL resources in the namespace
+Shellkubectl delete all --all -n kafkaShow more lines
+
+STEP 3 — Delete StatefulSets, CRDs, and leftover resources
+Confluent Operator creates many objects. Remove them:
+Delete CRDs
+Shellkubectl get crds | grep confluent | awk '{print $1}' | xargs kubectl delete crdShow more lines
+Delete StatefulSets
+Shellkubectl delete statefulset --all -n kafkaShow more lines
+Delete deployments
+Shellkubectl delete deployment --all -n kafkaShow more lines
+Delete jobs
+Shellkubectl delete job --all -n kafkaShow more lines
+Delete PVCs
+Shellkubectl delete pvc --all -n kafkaShow more lines
+
+STEP 4 — Delete the entire namespace (recommended)
+Since this namespace is polluted by Confluent's operator:
+Shellkubectl delete namespace kafka``Show more lines
+Then re-create it:
+Shellkubectl create namespace kafkaShow more lines
+
+STEP 5 — NOW install Bitnami Kafka correctly
+Shellhelm install kafka bitnami/kafka -n kafkaShow more lines
+
+What Bitnami Kafka pods should look like
+You should expect:
+kafka-0
+kafka-1
+kafka-2
+zookeeper-0
+zookeeper-1
+zookeeper-2
+
+⚠️ NOT:
+kafka-controller-0
+kafka-controller-1
+kafka-controller-2
+
+Those are Confluent.
+
+Please run this and send the output:
+kubectl get crds | grep confluent
+
+This will confirm which Confluent CRDs are still active and causing the unwanted controller pods.
+
+I can guide you step-by-step once I see that output.
+Provide your feedback on BizChat
