@@ -1,22 +1,49 @@
-You MUST delete the ENTIRE NAMESPACE to fix this
-Everything else you tried cannot remove Confluent leftovers.
-Run this:
+**You installed Bitnami Kafka in namespace kafka,
+BUT Minikube is running “kafka-controller” pods from a different namespace.**
+This explains EVERYTHING.
 
-✔ STEP 1 — Delete the whole namespace
-Shellkubectl delete namespace kafkaShow more lines
-Wait for it to fully disappear:
-Shellkubectl get nsShow more lines
-Only proceed when kafka is gone.
+✔ Step 1 — Check where the “kafka-controller-*” pods are actually running
+Please run:
+Shellkubectl get pods --all-namespaces | grep kafkaShow more lines
+You will see something like:
+kafka-controller-0   xxx   <some-other-namespace>
 
-✔ STEP 2 — Recreate a CLEAN namespace
-Shellkubectl create namespace kafkaShow more lines
+Those pods are NOT in the namespace you think.
+Most likely, the old Confluent resources are running in:
 
-✔ STEP 3 — Install Bitnami Kafka again
-Shellhelm install kafka bitnami/kafka -n kafka``Show more lines
+default
+or kube-system
+or an older namespace like kafka-new, kafka-2, etc.
 
-✔ STEP 4 — Check pods
-Shellkubectl get pods -n kafkaShow more lines
-Expected correct Bitnami result:
+This is why deleting the kafka namespace didn't remove them.
+
+✔ Step 2 — Identify who is creating those pods
+Run:
+Shellkubectl describe pod kafka-controller-0 --namespace <THEIR_NAMESPACE>Show more lines
+Inside the YAML, you will find the controller owner:
+Controlled By:  StatefulSet/kafka-controller
+
+OR
+Controlled By:  Kafka/kafka-new
+
+
+✔ Step 3 — Delete the Confluent deployment at the REAL namespace
+Once we identify the correct namespace:
+Delete the release:
+Shellhelm uninstall <release-name> -n <namespace>Show more lines
+Delete the namespace:
+Shellkubectl delete namespace <namespace>Show more lines
+
+🔥 Example: If the pods are in default
+Then:
+Shellhelm uninstall kafka-new -n defaultkubectl delete namespace defaultShow more lines
+(Or only delete the resources, not the namespace if it's a core namespace.)
+
+✔ Step 4 — Verify Bitnami Kafka is actually running now
+After cleaning:
+kubectl get pods -n kafka
+
+Bitnami pods are:
 kafka-0
 kafka-1
 kafka-2
@@ -24,31 +51,15 @@ zookeeper-0
 zookeeper-1
 zookeeper-2
 
-❌ NOT:
-kafka-controller-0
 
+🟩 Your next step — run this and send me the result
+Please send:
+Shellkubectl get pods --all-namespaces | grep kafkaShow more lines
+I will immediately tell you:
 
-❗ WHY namespace deletion is required
-Because Confluent Operator created hidden resources that:
+which namespace the wrong pods are in
+which release is responsible
+what exactly to delete
 
-do NOT disappear with kubectl delete all
-do NOT disappear with CRD deletion
-keep recreating kafka-controller-* pods even without CRDs
-
-Only deleting the namespace will remove:
-
-Finalizers
-Webhook configs
-Mutating admission configs
-Leftover CRs
-Orphaned resources managed by CFK operator
-
-
-👉 Please run this now:
-kubectl delete namespace kafka
-
-Then send me:
-kubectl get ns
-
-I’ll confirm when it's ready to reinstall Bitnami Kafka cleanly.
+After that, your Bitnami Kafka will finally run correctly.
 Provide your feedback on BizChat
