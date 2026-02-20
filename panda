@@ -1,54 +1,56 @@
-FIX: Completely clean the namespace and remove Confluent CRDs
-You must remove everything related to Confluent.
-
-STEP 1 — Delete ALL Confluent pods
-Shellkubectl delete pods --all -n kafkaShow more lines
-
-STEP 2 — Delete ALL resources in the namespace
+FIX: Completely remove ALL Confluent Kafka custom resources
+Run this to show ALL objects in the namespace:
+Shellkubectl get all -n kafkaShow more lines
+Then delete EVERYTHING:
 Shellkubectl delete all --all -n kafkaShow more lines
+But this is not enough, because Confluent operator uses Custom Resources (CRs) stored under API groups — NOT shown under "all".
+You must delete them too:
 
-STEP 3 — Delete StatefulSets, CRDs, and leftover resources
-Confluent Operator creates many objects. Remove them:
-Delete CRDs
-Shellkubectl get crds | grep confluent | awk '{print $1}' | xargs kubectl delete crdShow more lines
-Delete StatefulSets
-Shellkubectl delete statefulset --all -n kafkaShow more lines
-Delete deployments
-Shellkubectl delete deployment --all -n kafkaShow more lines
-Delete jobs
-Shellkubectl delete job --all -n kafkaShow more lines
-Delete PVCs
-Shellkubectl delete pvc --all -n kafkaShow more lines
+STEP 1 — Detect all existing API objects in the namespace
+Run:
+Shellkubectl api-resources --verbs=list --namespaced -o name | \xargs -n 1 kubectl get -n kafka --ignore-not-foundShow more lines
+This will reveal hidden CRs such as:
 
-STEP 4 — Delete the entire namespace (recommended)
-Since this namespace is polluted by Confluent's operator:
-Shellkubectl delete namespace kafka``Show more lines
-Then re-create it:
+kafkas.platform.confluent.io
+controllers.platform.confluent.io
+connectors.platform.confluent.io
+zookeepers.platform.confluent.io
+
+Even if CRDs are removed, these objects remain and cause pods to respawn.
+
+STEP 2 — Delete all Confluent custom objects forcibly
+Run:
+Shellkubectl delete kafka --all -n kafka --ignore-not-foundkubectl delete controller --all -n kafka --ignore-not-foundkubectl delete zookeeper --all -n kafka --ignore-not-foundkubectl delete ksql --all -n kafka --ignore-not-foundkubectl delete connect --all -n kafka --ignore-not-foundkubectl delete replicator --all -n kafka --ignore-not-foundShow more lines
+These are all CFK resource types.
+
+STEP 3 — Delete the namespace ENTIRELY
+This is the cleanest fix.
+Shellkubectl delete namespace kafkaShow more lines
+Wait until it is fully removed:
+Shellkubectl get nsShow more lines
+Then recreate a clean namespace:
 Shellkubectl create namespace kafkaShow more lines
 
-STEP 5 — NOW install Bitnami Kafka correctly
+STEP 4 — Install Bitnami Kafka cleanly
 Shellhelm install kafka bitnami/kafka -n kafkaShow more lines
 
-What Bitnami Kafka pods should look like
-You should expect:
-kafka-0
-kafka-1
-kafka-2
-zookeeper-0
-zookeeper-1
-zookeeper-2
+🟢 EXPECTED OUTPUT
+After reinstall:
+Shellkubectl get pods -n kafkaShow more lines
+You should see:
+kafka-0          Running
+kafka-1          Running
+kafka-2          Running
+zookeeper-0      Running
+zookeeper-1      Running
+zookeeper-2      Running
 
-⚠️ NOT:
+NO MORE:
 kafka-controller-0
 kafka-controller-1
 kafka-controller-2
 
-Those are Confluent.
 
-Please run this and send the output:
-kubectl get crds | grep confluent
-
-This will confirm which Confluent CRDs are still active and causing the unwanted controller pods.
-
-I can guide you step-by-step once I see that output.
-Provide your feedback on BizChat
+▶️ Please send this output next:
+kubectl api-resources --verbs=list --namespaced -o name | \
+xargs -n 1 kubectl get -n kafka --ignore-not-found
