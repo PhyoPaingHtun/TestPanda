@@ -1,65 +1,42 @@
-**You installed Bitnami Kafka in namespace kafka,
-BUT Minikube is running “kafka-controller” pods from a different namespace.**
-This explains EVERYTHING.
+Fix it (pick ONE of the options below)
+Option A — Update the chart and let it choose a valid tag
+Shellhelm repo updatehelm upgrade --install kafka bitnami/kafka -n kafkaShow more lines
+This refreshes the chart and pulls the current default tag that exists.
 
-✔ Step 1 — Check where the “kafka-controller-*” pods are actually running
-Please run:
-Shellkubectl get pods --all-namespaces | grep kafkaShow more lines
-You will see something like:
-kafka-controller-0   xxx   <some-other-namespace>
+Option B — Explicitly pin a valid tag (simplest & reliable)
+Use a tag that surely exists (Bitnami publishes major/minor aliases without the -rXX suffix). For Kafka 4.0.0:
+Shellhelm upgrade --install kafka bitnami/kafka -n kafka \  --set image.tag=4.0.0Show more lines
+If you also see an init container using the same repo, pin it too:
+Shellhelm upgrade --install kafka bitnami/kafka -n kafka \  --set image.tag=4.0.0 \  --set controller.image.tag=4.0.0 \  --set defaultInitContainers.prepareConfig.image.tag=4.0.0Show more lines
 
-Those pods are NOT in the namespace you think.
-Most likely, the old Confluent resources are running in:
-
-default
-or kube-system
-or an older namespace like kafka-new, kafka-2, etc.
-
-This is why deleting the kafka namespace didn't remove them.
-
-✔ Step 2 — Identify who is creating those pods
-Run:
-Shellkubectl describe pod kafka-controller-0 --namespace <THEIR_NAMESPACE>Show more lines
-Inside the YAML, you will find the controller owner:
-Controlled By:  StatefulSet/kafka-controller
-
-OR
-Controlled By:  Kafka/kafka-new
+After this, check:
+Shellkubectl get pods -n kafkakubectl describe pod <one-of-the-pods> -n kafka | grep -i "image:"Show more lines
 
 
-✔ Step 3 — Delete the Confluent deployment at the REAL namespace
-Once we identify the correct namespace:
-Delete the release:
-Shellhelm uninstall <release-name> -n <namespace>Show more lines
-Delete the namespace:
-Shellkubectl delete namespace <namespace>Show more lines
+Option C — Pull from GitHub Container Registry (sometimes more up-to-date)
+Bitnami mirrors images on GHCR. Point the chart to GHCR and pin a clean tag:
+Shellhelm upgrade --install kafka bitnami/kafka -n kafka \  --set image.registry=ghcr.io \  --set image.repository=bitnami/kafka \  --set image.tag=4.0.0Show more lines
 
-🔥 Example: If the pods are in default
-Then:
-Shellhelm uninstall kafka-new -n defaultkubectl delete namespace defaultShow more lines
-(Or only delete the resources, not the namespace if it's a core namespace.)
-
-✔ Step 4 — Verify Bitnami Kafka is actually running now
-After cleaning:
-kubectl get pods -n kafka
-
-Bitnami pods are:
-kafka-0
-kafka-1
-kafka-2
-zookeeper-0
-zookeeper-1
-zookeeper-2
+If you still hit ImagePullBackOff after pinning
 
 
-🟩 Your next step — run this and send me the result
-Please send:
-Shellkubectl get pods --all-namespaces | grep kafkaShow more lines
-I will immediately tell you:
+Verify the exact tag in use
+Shellkubectl describe pod <pod> -n kafka | grep -i "image:"Show more lines
+Ensure it matches what you set.
 
-which namespace the wrong pods are in
-which release is responsible
-what exactly to delete
 
-After that, your Bitnami Kafka will finally run correctly.
-Provide your feedback on BizChat
+Minikube docker-env (if you’re building locally)
+If you built a local image, ensure you built it inside Minikube’s Docker:
+Shelleval $(minikube docker-env)docker pull docker.io/bitnami/kafka:4.0.0Show more lines
+
+
+Rate limits / transient errors
+Try once more or switch to GHCR as in Option C.
+
+
+
+Why did this happen?
+
+The chart revision you installed referenced bitnami/kafka:4.0.0-debian-12-r10.
+That exact digest/tag is missing in Docker Hub now (Bitnami periodically retires or replaces -rXX sub-tags).
+Pinning to 4.0.0 (without -rXX) or updating the chart removes the mismatch.
