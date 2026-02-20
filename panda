@@ -1,56 +1,54 @@
-FIX: Completely remove ALL Confluent Kafka custom resources
-Run this to show ALL objects in the namespace:
-Shellkubectl get all -n kafkaShow more lines
-Then delete EVERYTHING:
-Shellkubectl delete all --all -n kafkaShow more lines
-But this is not enough, because Confluent operator uses Custom Resources (CRs) stored under API groups — NOT shown under "all".
-You must delete them too:
+You MUST delete the ENTIRE NAMESPACE to fix this
+Everything else you tried cannot remove Confluent leftovers.
+Run this:
 
-STEP 1 — Detect all existing API objects in the namespace
-Run:
-Shellkubectl api-resources --verbs=list --namespaced -o name | \xargs -n 1 kubectl get -n kafka --ignore-not-foundShow more lines
-This will reveal hidden CRs such as:
-
-kafkas.platform.confluent.io
-controllers.platform.confluent.io
-connectors.platform.confluent.io
-zookeepers.platform.confluent.io
-
-Even if CRDs are removed, these objects remain and cause pods to respawn.
-
-STEP 2 — Delete all Confluent custom objects forcibly
-Run:
-Shellkubectl delete kafka --all -n kafka --ignore-not-foundkubectl delete controller --all -n kafka --ignore-not-foundkubectl delete zookeeper --all -n kafka --ignore-not-foundkubectl delete ksql --all -n kafka --ignore-not-foundkubectl delete connect --all -n kafka --ignore-not-foundkubectl delete replicator --all -n kafka --ignore-not-foundShow more lines
-These are all CFK resource types.
-
-STEP 3 — Delete the namespace ENTIRELY
-This is the cleanest fix.
+✔ STEP 1 — Delete the whole namespace
 Shellkubectl delete namespace kafkaShow more lines
-Wait until it is fully removed:
+Wait for it to fully disappear:
 Shellkubectl get nsShow more lines
-Then recreate a clean namespace:
+Only proceed when kafka is gone.
+
+✔ STEP 2 — Recreate a CLEAN namespace
 Shellkubectl create namespace kafkaShow more lines
 
-STEP 4 — Install Bitnami Kafka cleanly
-Shellhelm install kafka bitnami/kafka -n kafkaShow more lines
+✔ STEP 3 — Install Bitnami Kafka again
+Shellhelm install kafka bitnami/kafka -n kafka``Show more lines
 
-🟢 EXPECTED OUTPUT
-After reinstall:
+✔ STEP 4 — Check pods
 Shellkubectl get pods -n kafkaShow more lines
-You should see:
-kafka-0          Running
-kafka-1          Running
-kafka-2          Running
-zookeeper-0      Running
-zookeeper-1      Running
-zookeeper-2      Running
+Expected correct Bitnami result:
+kafka-0
+kafka-1
+kafka-2
+zookeeper-0
+zookeeper-1
+zookeeper-2
 
-NO MORE:
+❌ NOT:
 kafka-controller-0
-kafka-controller-1
-kafka-controller-2
 
 
-▶️ Please send this output next:
-kubectl api-resources --verbs=list --namespaced -o name | \
-xargs -n 1 kubectl get -n kafka --ignore-not-found
+❗ WHY namespace deletion is required
+Because Confluent Operator created hidden resources that:
+
+do NOT disappear with kubectl delete all
+do NOT disappear with CRD deletion
+keep recreating kafka-controller-* pods even without CRDs
+
+Only deleting the namespace will remove:
+
+Finalizers
+Webhook configs
+Mutating admission configs
+Leftover CRs
+Orphaned resources managed by CFK operator
+
+
+👉 Please run this now:
+kubectl delete namespace kafka
+
+Then send me:
+kubectl get ns
+
+I’ll confirm when it's ready to reinstall Bitnami Kafka cleanly.
+Provide your feedback on BizChat
