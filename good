@@ -7,3 +7,9 @@ sudo journalctl -u kibana -n 80 --no-pager
 curl -I --max-time 10 http://127.0.0.1:5601
 IoHjjToqFtCI-DtKqqAM
 sudo grep -E '^(cluster.name|node.name|network.host|http.port|transport.port|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts)' /etc/elasticsearch/elasticsearch.yml
+sudo systemctl status elasticsearch -l --no-pager
+sudo journalctl -xeu elasticsearch.service --no-pager | tail -n 80
+sudo tail -n 100 /var/log/elasticsearch/elasticsearch.log
+sudo grep -nE '^(cluster.name|network.host|http.port|http.host|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
+sudo grep -nE '^(cluster.name|network.host|http.port|http.host|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
+sudo journalctl -xeu elasticsearch.service --no-pager | tail -n 80
