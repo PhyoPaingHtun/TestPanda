@@ -17,7 +17,8 @@ df -h
 df -i
 sudo du -sh /var/lib/elasticsearch /var/log/elasticsearch /tmp 2>/dev/null
 sudo du -xh / | sort -h | tail -n 30
-
+sudo tail -n 120 /var/log/elasticsearch/ElasticSIEM.log
+sudo grep -nE '^(cluster.name|node.name|network.host|http.host|http.port|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
 
 root@siem-AHV:/# sudo systemctl status elasticsearch -l --no-pager
 × elasticsearch.service - Elasticsearch
