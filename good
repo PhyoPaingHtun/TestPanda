@@ -13,6 +13,10 @@ sudo tail -n 100 /var/log/elasticsearch/elasticsearch.log
 sudo grep -nE '^(cluster.name|network.host|http.port|http.host|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
 sudo grep -nE '^(cluster.name|network.host|http.port|http.host|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
 sudo journalctl -xeu elasticsearch.service --no-pager | tail -n 80
+df -h
+df -i
+sudo du -sh /var/lib/elasticsearch /var/log/elasticsearch /tmp 2>/dev/null
+sudo du -xh / | sort -h | tail -n 30
 
 
 root@siem-AHV:/# sudo systemctl status elasticsearch -l --no-pager
