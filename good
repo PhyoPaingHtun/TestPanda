@@ -13,3 +13,104 @@ sudo tail -n 100 /var/log/elasticsearch/elasticsearch.log
 sudo grep -nE '^(cluster.name|network.host|http.port|http.host|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
 sudo grep -nE '^(cluster.name|network.host|http.port|http.host|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
 sudo journalctl -xeu elasticsearch.service --no-pager | tail -n 80
+
+
+root@siem-AHV:/# sudo systemctl status elasticsearch -l --no-pager
+× elasticsearch.service - Elasticsearch
+     Loaded: loaded (/usr/lib/systemd/system/elasticsearch.service; enabled; preset: enabled)
+     Active: failed (Result: exit-code) since Tue 2026-03-10 14:43:38 +07; 1min 45s ago
+   Duration: 35min 19.216s
+       Docs: https://www.elastic.co
+    Process: 3402282 ExecStart=/usr/share/elasticsearch/bin/systemd-entrypoint -p ${PID_DIR}/elasticsearch.pid --quiet (code=exited, status=1/FAILURE)
+   Main PID: 3402282 (code=exited, status=1/FAILURE)
+        CPU: 1min 20.407s
+
+Mar 10 14:43:14 siem-AHV systemd[1]: Starting elasticsearch.service - Elasticsearch...
+Mar 10 14:43:35 siem-AHV systemd-entrypoint[3402282]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/ElasticSIEM.log
+Mar 10 14:43:38 siem-AHV systemd-entrypoint[3402282]: ERROR: Elasticsearch died while starting up, with exit code 1
+Mar 10 14:43:38 siem-AHV systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+Mar 10 14:43:38 siem-AHV systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+Mar 10 14:43:38 siem-AHV systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+Mar 10 14:43:38 siem-AHV systemd[1]: elasticsearch.service: Consumed 1min 20.407s CPU time.
+root@siem-AHV:/# sudo journalctl -xeu elasticsearch.service --no-pager | tail -n 80
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at org.elasticsearch.security@8.18.2/org.elasticsearch.xpack.security.transport.ServerTransportFilter.inbound(ServerTransportFilter.java:105)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at org.elasticsearch.security@8.18.2/org.elasticsearch.xpack.security.transport.SecurityServerTransportInterceptor$ProfileSecuredRequestHandler.messageReceived(SecurityServerTransportInterceptor.java:643)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at org.elasticsearch.server@8.18.2/org.elasticsearch.transport.RequestHandlerRegistry.processMessageReceived(RequestHandlerRegistry.java:76)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at org.elasticsearch.server@8.18.2/org.elasticsearch.transport.TransportService$6.doRun(TransportService.java:1099)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at org.elasticsearch.server@8.18.2/org.elasticsearch.common.util.concurrent.ThreadContext$ContextPreservingAbstractRunnable.doRun(ThreadContext.java:1044)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at org.elasticsearch.server@8.18.2/org.elasticsearch.common.util.concurrent.AbstractRunnable.run(AbstractRunnable.java:27)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at java.base/java.lang.Thread.run(Thread.java:1447)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]: Caused by: java.io.IOException: No space left on device
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at java.base/java.io.FileOutputStream.writeBytes(Native Method)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at java.base/java.io.FileOutputStream.write(FileOutputStream.java:360)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         at org.apache.logging.log4j.core@8.18.2/org.apache.logging.log4j.core.appender.OutputStreamManager.writeToDestination(OutputStreamManager.java:250)
+Mar 10 14:33:54 siem-AHV systemd-entrypoint[3388470]:         ... 128 more
+Mar 10 14:42:18 siem-AHV systemd[1]: Stopping elasticsearch.service - Elasticsearch...
+░░ Subject: A stop job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A stop job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 160139439.
+Mar 10 14:43:14 siem-AHV systemd[1]: elasticsearch.service: Deactivated successfully.
+░░ Subject: Unit succeeded
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit elasticsearch.service has successfully entered the 'dead' state.
+Mar 10 14:43:14 siem-AHV systemd[1]: Stopped elasticsearch.service - Elasticsearch.
+░░ Subject: A stop job for unit elasticsearch.service has finished
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A stop job for unit elasticsearch.service has finished.
+░░ 
+░░ The job identifier is 160139439 and the job result is done.
+Mar 10 14:43:14 siem-AHV systemd[1]: elasticsearch.service: Consumed 1h 20min 30.738s CPU time, 37.0G memory peak, 0B memory swap peak.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+Mar 10 14:43:14 siem-AHV systemd[1]: Starting elasticsearch.service - Elasticsearch...
+░░ Subject: A start job for unit elasticsearch.service has begun execution
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit elasticsearch.service has begun execution.
+░░ 
+░░ The job identifier is 160139439.
+Mar 10 14:43:35 siem-AHV systemd-entrypoint[3402282]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/ElasticSIEM.log
+Mar 10 14:43:38 siem-AHV systemd-entrypoint[3402282]: ERROR: Elasticsearch died while starting up, with exit code 1
+Mar 10 14:43:38 siem-AHV systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Mar 10 14:43:38 siem-AHV systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+Mar 10 14:43:38 siem-AHV systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░ 
+░░ The job identifier is 160139439 and the job result is failed.
+Mar 10 14:43:38 siem-AHV systemd[1]: elasticsearch.service: Consumed 1min 20.407s CPU time.
+░░ Subject: Resources consumed by unit runtime
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit elasticsearch.service completed and consumed the indicated resources.
+root@siem-AHV:/# 
