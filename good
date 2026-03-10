@@ -20,138 +20,107 @@ sudo du -xh / | sort -h | tail -n 30
 sudo tail -n 120 /var/log/elasticsearch/ElasticSIEM.log
 sudo grep -nE '^(cluster.name|node.name|network.host|http.host|http.port|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
 
-Mar 10 14:57:29 siem-AHV systemd[1]: Starting elasticsearch.service - Elasticsearch...
-Mar 10 14:57:46 siem-AHV systemd-entrypoint[3408064]: ERROR: Elasticsearch did not exit normally - check the logs at /var/log/elasticsearch/ElasticSIEM.log
-Mar 10 14:57:49 siem-AHV systemd-entrypoint[3408064]: ERROR: Elasticsearch died while starting up, with exit code 1
-Mar 10 14:57:49 siem-AHV systemd[1]: elasticsearch.service: Main process exited, code=exited, status=1/FAILURE
-Mar 10 14:57:49 siem-AHV systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
-Mar 10 14:57:49 siem-AHV systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
-Mar 10 14:57:49 siem-AHV systemd[1]: elasticsearch.service: Consumed 1min 23.395s CPU time.
-root@siem-AHV:/# sudo tail -n 120 /var/log/elasticsearch/ElasticSIEM.log
-	at org.elasticsearch.common.settings.AbstractScopedSettings.validate(AbstractScopedSettings.java:450) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.common.settings.SettingsModule.<init>(SettingsModule.java:133) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.common.settings.SettingsModule.<init>(SettingsModule.java:51) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.node.NodeConstruction.validateSettings(NodeConstruction.java:534) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.node.NodeConstruction.prepareConstruction(NodeConstruction.java:284) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.node.Node.<init>(Node.java:201) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.bootstrap.Elasticsearch$2.<init>(Elasticsearch.java:385) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.bootstrap.Elasticsearch.initPhase3(Elasticsearch.java:385) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.bootstrap.Elasticsearch.main(Elasticsearch.java:97) ~[elasticsearch-8.18.2.jar:?]
-[2026-03-10T14:57:37,925][INFO ][o.e.n.j.JdkVectorLibrary ] [siem-AHV] vec_caps=2
-[2026-03-10T14:57:37,959][INFO ][o.e.n.NativeAccess       ] [siem-AHV] Using native vector library; to disable start with -Dorg.elasticsearch.nativeaccess.enableVectorLibrary=false
-[2026-03-10T14:57:37,981][INFO ][o.e.n.NativeAccess       ] [siem-AHV] Using [jdk] native provider and native methods for [Linux]
-[2026-03-10T14:57:38,117][INFO ][o.a.l.i.v.PanamaVectorizationProvider] [siem-AHV] Java vector incubator API enabled; uses preferredBitSize=512; FMA enabled
-[2026-03-10T14:57:38,190][INFO ][o.e.b.Elasticsearch      ] [siem-AHV] Bootstrapping Entitlements
-[2026-03-10T14:57:42,018][INFO ][o.e.n.Node               ] [siem-AHV] version[8.18.2], pid[3408160], build[deb/c6b8d8d951c631db715485edc1a74190cdce4189/2025-05-23T10:07:06.210694702Z], OS[Linux/6.11.0-19-generic/amd64], JVM[Oracle Corporation/OpenJDK 64-Bit Server VM/24/24+36-3646]
-[2026-03-10T14:57:42,018][INFO ][o.e.n.Node               ] [siem-AHV] JVM home [/usr/share/elasticsearch/jdk], using bundled JDK [true]
-[2026-03-10T14:57:42,018][INFO ][o.e.n.Node               ] [siem-AHV] JVM arguments [-Des.networkaddress.cache.ttl=60, -Des.networkaddress.cache.negative.ttl=10, -XX:+AlwaysPreTouch, -Xss1m, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djna.nosys=true, -XX:-OmitStackTraceInFastThrow, -Dio.netty.noUnsafe=true, -Dio.netty.noKeySetOptimization=true, -Dio.netty.recycler.maxCapacityPerThread=0, -Dlog4j.shutdownHookEnabled=false, -Dlog4j2.disable.jmx=true, -Dlog4j2.formatMsgNoLookups=true, -Djava.locale.providers=CLDR, -Dorg.apache.lucene.vectorization.upperJavaFeatureVersion=24, -Des.distribution.type=deb, -Des.java.type=null, --enable-native-access=org.elasticsearch.nativeaccess,org.apache.lucene.core, --enable-native-access=ALL-UNNAMED, --illegal-native-access=deny, -XX:ReplayDataFile=/var/log/elasticsearch/replay_pid%p.log, -Des.entitlements.enabled=true, -XX:+EnableDynamicAgentLoading, -Djdk.attach.allowAttachSelf=true, --patch-module=java.base=lib/entitlement-bridge/elasticsearch-entitlement-bridge-8.18.2.jar, --add-exports=java.base/org.elasticsearch.entitlement.bridge=org.elasticsearch.entitlement,java.logging,java.net.http,java.naming,jdk.net, -XX:+UseG1GC, -Djava.io.tmpdir=/tmp/elasticsearch-14218851141073260088, --add-modules=jdk.incubator.vector, -XX:+HeapDumpOnOutOfMemoryError, -XX:+ExitOnOutOfMemoryError, -XX:HeapDumpPath=/var/lib/elasticsearch, -XX:ErrorFile=/var/log/elasticsearch/hs_err_pid%p.log, -Xlog:gc*,gc+age=trace,safepoint:file=/var/log/elasticsearch/gc.log:utctime,level,pid,tags:filecount=32,filesize=64m, -Xms31744m, -Xmx31744m, -XX:MaxDirectMemorySize=16642998272, -XX:InitiatingHeapOccupancyPercent=30, -XX:G1ReservePercent=25, --module-path=/usr/share/elasticsearch/lib, --add-modules=jdk.net, --add-modules=jdk.management.agent, --add-modules=ALL-MODULE-PATH, -Djdk.module.main=org.elasticsearch.server]
-[2026-03-10T14:57:42,019][INFO ][o.e.n.Node               ] [siem-AHV] Default Locale [en_US]
-[2026-03-10T14:57:44,265][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [repository-url]
-[2026-03-10T14:57:44,266][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [rest-root]
-[2026-03-10T14:57:44,266][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-core]
-[2026-03-10T14:57:44,266][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-redact]
-[2026-03-10T14:57:44,267][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [ingest-user-agent]
-[2026-03-10T14:57:44,267][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-async-search]
-[2026-03-10T14:57:44,267][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-monitoring]
-[2026-03-10T14:57:44,267][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [repository-s3]
-[2026-03-10T14:57:44,267][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-analytics]
-[2026-03-10T14:57:44,268][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-esql-core]
-[2026-03-10T14:57:44,268][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-ent-search]
-[2026-03-10T14:57:44,268][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-autoscaling]
-[2026-03-10T14:57:44,268][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [lang-painless]
-[2026-03-10T14:57:44,268][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-ml]
-[2026-03-10T14:57:44,268][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [lang-mustache]
-[2026-03-10T14:57:44,269][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [legacy-geo]
-[2026-03-10T14:57:44,269][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-ql]
-[2026-03-10T14:57:44,269][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [logsdb]
-[2026-03-10T14:57:44,269][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [rank-rrf]
-[2026-03-10T14:57:44,269][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [analysis-common]
-[2026-03-10T14:57:44,269][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [health-shards-availability]
-[2026-03-10T14:57:44,270][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [transport-netty4]
-[2026-03-10T14:57:44,270][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [aggregations]
-[2026-03-10T14:57:44,270][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [ingest-common]
-[2026-03-10T14:57:44,270][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [frozen-indices]
-[2026-03-10T14:57:44,270][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-identity-provider]
-[2026-03-10T14:57:44,271][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-shutdown]
-[2026-03-10T14:57:44,271][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-text-structure]
-[2026-03-10T14:57:44,271][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [snapshot-repo-test-kit]
-[2026-03-10T14:57:44,271][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [ml-package-loader]
-[2026-03-10T14:57:44,271][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [kibana]
-[2026-03-10T14:57:44,271][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [constant-keyword]
-[2026-03-10T14:57:44,272][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-logstash]
-[2026-03-10T14:57:44,272][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-ccr]
-[2026-03-10T14:57:44,272][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-graph]
-[2026-03-10T14:57:44,272][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [rank-vectors]
-[2026-03-10T14:57:44,272][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-esql]
-[2026-03-10T14:57:44,272][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [parent-join]
-[2026-03-10T14:57:44,273][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-enrich]
-[2026-03-10T14:57:44,273][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [counted-keyword]
-[2026-03-10T14:57:44,273][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [repositories-metering-api]
-[2026-03-10T14:57:44,273][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [transform]
-[2026-03-10T14:57:44,273][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [repository-azure]
-[2026-03-10T14:57:44,273][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [dot-prefix-validation]
-[2026-03-10T14:57:44,274][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [repository-gcs]
-[2026-03-10T14:57:44,274][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-otel-data]
-[2026-03-10T14:57:44,274][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [spatial]
-[2026-03-10T14:57:44,274][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [mapper-extras]
-[2026-03-10T14:57:44,274][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [mapper-version]
-[2026-03-10T14:57:44,274][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [apm]
-[2026-03-10T14:57:44,274][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-rollup]
-[2026-03-10T14:57:44,274][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [percolator]
-[2026-03-10T14:57:44,275][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-migrate]
-[2026-03-10T14:57:44,275][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-stack]
-[2026-03-10T14:57:44,275][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [data-streams]
-[2026-03-10T14:57:44,276][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [systemd]
-[2026-03-10T14:57:44,277][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [reindex]
-[2026-03-10T14:57:44,277][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [rank-eval]
-[2026-03-10T14:57:44,277][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-security]
-[2026-03-10T14:57:44,277][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [blob-cache]
-[2026-03-10T14:57:44,277][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [searchable-snapshots]
-[2026-03-10T14:57:44,278][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-slm]
-[2026-03-10T14:57:44,278][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-geoip-enterprise-downloader]
-[2026-03-10T14:57:44,278][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [snapshot-based-recoveries]
-[2026-03-10T14:57:44,278][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-watcher]
-[2026-03-10T14:57:44,278][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [old-lucene-versions]
-[2026-03-10T14:57:44,279][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-ilm]
-[2026-03-10T14:57:44,279][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-voting-only-node]
-[2026-03-10T14:57:44,279][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-inference]
-[2026-03-10T14:57:44,279][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-deprecation]
-[2026-03-10T14:57:44,279][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-fleet]
-[2026-03-10T14:57:44,279][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-profiling]
-[2026-03-10T14:57:44,279][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-aggregate-metric]
-[2026-03-10T14:57:44,280][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-downsample]
-[2026-03-10T14:57:44,280][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [ingest-geoip]
-[2026-03-10T14:57:44,280][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-write-load-forecaster]
-[2026-03-10T14:57:44,280][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [search-business-rules]
-[2026-03-10T14:57:44,280][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [wildcard]
-[2026-03-10T14:57:44,280][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [ingest-attachment]
-[2026-03-10T14:57:44,280][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-apm-data]
-[2026-03-10T14:57:44,280][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [unsigned-long]
-[2026-03-10T14:57:44,281][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-sql]
-[2026-03-10T14:57:44,281][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [runtime-fields-common]
-[2026-03-10T14:57:44,281][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-async]
-[2026-03-10T14:57:44,281][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-kql]
-[2026-03-10T14:57:44,281][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [vector-tile]
-[2026-03-10T14:57:44,281][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [lang-expression]
-[2026-03-10T14:57:44,281][INFO ][o.e.p.PluginsService     ] [siem-AHV] loaded module [x-pack-eql]
-[2026-03-10T14:57:46,418][ERROR][o.e.b.Elasticsearch      ] [siem-AHV] fatal exception while booting Elasticsearch
-java.lang.IllegalArgumentException: unknown setting [discovery-type] did you mean [discovery.type]?
-	at org.elasticsearch.common.settings.AbstractScopedSettings.validate(AbstractScopedSettings.java:564) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.common.settings.AbstractScopedSettings.validate(AbstractScopedSettings.java:510) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.common.settings.AbstractScopedSettings.validate(AbstractScopedSettings.java:480) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.common.settings.AbstractScopedSettings.validate(AbstractScopedSettings.java:450) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.common.settings.SettingsModule.<init>(SettingsModule.java:133) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.common.settings.SettingsModule.<init>(SettingsModule.java:51) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.node.NodeConstruction.validateSettings(NodeConstruction.java:534) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.node.NodeConstruction.prepareConstruction(NodeConstruction.java:284) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.node.Node.<init>(Node.java:201) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.bootstrap.Elasticsearch$2.<init>(Elasticsearch.java:385) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.bootstrap.Elasticsearch.initPhase3(Elasticsearch.java:385) ~[elasticsearch-8.18.2.jar:?]
-	at org.elasticsearch.bootstrap.Elasticsearch.main(Elasticsearch.java:97) ~[elasticsearch-8.18.2.jar:?]
-root@siem-AHV:/# sudo grep -nE '^(cluster.name|node.name|network.host|http.host|http.port|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts|xpack.security.enabled|xpack.security.http.ssl.enabled|xpack.security.transport.ssl.enabled)' /etc/elasticsearch/elasticsearch.yml
-17:cluster.name: ElasticSIEM
-56:network.host: 0.0.0.0
-61:http.port: 9200
-67:discovery-type: single-node
-93:xpack.security.enabled: true
-114:http.host: 0.0.0.0
+root@siem-AHV:/# sudo systemctl status kibana -l --no-pager
+● kibana.service - Kibana
+     Loaded: loaded (/usr/lib/systemd/system/kibana.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-03-10 15:11:05 +07; 26s ago
+       Docs: https://www.elastic.co
+   Main PID: 3413534 (node)
+      Tasks: 11 (limit: 18992)
+     Memory: 453.2M (peak: 453.4M)
+        CPU: 22.035s
+     CGroup: /system.slice/kibana.service
+             └─3413534 /usr/share/kibana/bin/../node/glibc-217/bin/node /usr/share/kibana/bin/../src/cli/dist
+
+Mar 10 15:11:05 siem-AHV systemd[1]: Started kibana.service - Kibana.
+Mar 10 15:11:05 siem-AHV kibana[3413534]: Kibana is currently running with legacy OpenSSL providers enabled! For details and instructions on how to disable see https://www.elastic.co/guide/en/kibana/8.18/production.html#openssl-legacy-provider
+Mar 10 15:11:06 siem-AHV kibana[3413534]: {"log.level":"info","@timestamp":"2026-03-10T08:11:06.027Z","log.logger":"elastic-apm-node","ecs.version":"8.10.0","agentVersion":"4.13.0","env":{"pid":3413534,"proctitle":"/usr/share/kibana/bin/../node/glibc-217/bin/node","os":"linux 6.11.0-19-generic","arch":"x64","host":"siem-AHV","timezone":"UTC+0700","runtime":"Node.js v20.18.2"},"config":{"active":{"source":"start","value":true},"breakdownMetrics":{"source":"start","value":false},"captureBody":{"source":"start","value":"off","commonName":"capture_body"},"captureHeaders":{"source":"start","value":false},"centralConfig":{"source":"start","value":false},"contextPropagationOnly":{"source":"start","value":true},"environment":{"source":"start","value":"production"},"globalLabels":{"source":"start","value":[["kibana_uuid","0c8e860a-cf60-471b-98e7-18a93fcd66d5"],["git_rev","c381b5aca4e1e164e92bf39435fb80557f7d32f3"]],"sourceValue":{"kibana_uuid":"0c8e860a-cf60-471b-98e7-18a93fcd66d5","git_rev":"c381b5aca4e1e164e92bf39435fb80557f7d32f3"}},"logLevel":{"source":"default","value":"info","commonName":"log_level"},"metricsInterval":{"source":"start","value":120,"sourceValue":"120s"},"serverUrl":{"source":"start","value":"https://kibana-cloud-apm.apm.us-east-1.aws.found.io/","commonName":"server_url"},"transactionSampleRate":{"source":"start","value":0.1,"commonName":"transaction_sample_rate"},"captureSpanStackTraces":{"source":"start","sourceValue":false},"secretToken":{"source":"start","value":"[REDACTED]","commonName":"secret_token"},"serviceName":{"source":"start","value":"kibana","commonName":"service_name"},"serviceVersion":{"source":"start","value":"8.18.2","commonName":"service_version"}},"activationMethod":"require","message":"Elastic APM Node.js Agent v4.13.0"}
+Mar 10 15:11:06 siem-AHV kibana[3413534]: Native global console methods have been overridden in production environment.
+Mar 10 15:11:07 siem-AHV kibana[3413534]: [2026-03-10T15:11:07.576+07:00][INFO ][root] Kibana is starting
+Mar 10 15:11:07 siem-AHV kibana[3413534]: [2026-03-10T15:11:07.622+07:00][WARN ][environment] pid file already exists at /run/kibana/kibana.pid
+Mar 10 15:11:07 siem-AHV kibana[3413534]: [2026-03-10T15:11:07.627+07:00][INFO ][node] Kibana process configured with roles: [background_tasks, ui]
+Mar 10 15:11:22 siem-AHV kibana[3413534]: [2026-03-10T15:11:22.653+07:00][INFO ][plugins-service] The following plugins are disabled: "cloudChat,cloudExperiments,cloudFullStory,dataUsage,investigateApp,investigate,profilingDataAccess,profiling,searchHomepage,searchIndices,securitySolutionServerless,serverless,serverlessObservability,serverlessSearch".
+Mar 10 15:11:22 siem-AHV kibana[3413534]: [2026-03-10T15:11:22.770+07:00][INFO ][http.server.Preboot] http server running at http://0.0.0.0:5601
+Mar 10 15:11:22 siem-AHV kibana[3413534]: [2026-03-10T15:11:22.982+07:00][INFO ][plugins-system.preboot] Setting up [1] plugins: [interactiveSetup]
+root@siem-AHV:/# sudo journalctl -u kibana -n 80 --no-pager
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.100+07:00][ERROR][savedobjects-service] [.kibana] Action failed with 'security_exception
+Mar 10 15:11:51 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:51 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 3 in 8 seconds.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.101+07:00][INFO ][savedobjects-service] [.kibana] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 4010ms.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.119+07:00][ERROR][savedobjects-service] [.kibana_ingest] Action failed with 'security_exception
+Mar 10 15:11:51 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:51 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 3 in 8 seconds.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.120+07:00][INFO ][savedobjects-service] [.kibana_ingest] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 4011ms.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.137+07:00][ERROR][savedobjects-service] [.kibana_analytics] Action failed with 'security_exception
+Mar 10 15:11:51 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:51 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 3 in 8 seconds.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.138+07:00][INFO ][savedobjects-service] [.kibana_analytics] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 4013ms.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.150+07:00][ERROR][savedobjects-service] [.kibana_task_manager] Action failed with 'security_exception
+Mar 10 15:11:51 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:51 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 3 in 8 seconds.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.151+07:00][INFO ][savedobjects-service] [.kibana_task_manager] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 4016ms.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.161+07:00][ERROR][savedobjects-service] [.kibana_usage_counters] Action failed with 'security_exception
+Mar 10 15:11:51 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:51 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 3 in 8 seconds.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.162+07:00][INFO ][savedobjects-service] [.kibana_usage_counters] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 4022ms.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.168+07:00][ERROR][savedobjects-service] [.kibana_security_solution] Action failed with 'security_exception
+Mar 10 15:11:51 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:51 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 3 in 8 seconds.
+Mar 10 15:11:51 siem-AHV kibana[3413534]: [2026-03-10T15:11:51.169+07:00][INFO ][savedobjects-service] [.kibana_security_solution] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 4023ms.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.096+07:00][ERROR][savedobjects-service] [.kibana_alerting_cases] Action failed with 'security_exception
+Mar 10 15:11:59 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:59 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 4 in 16 seconds.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.097+07:00][INFO ][savedobjects-service] [.kibana_alerting_cases] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 8010ms.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.110+07:00][ERROR][savedobjects-service] [.kibana] Action failed with 'security_exception
+Mar 10 15:11:59 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:59 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 4 in 16 seconds.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.111+07:00][INFO ][savedobjects-service] [.kibana] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 8010ms.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.131+07:00][ERROR][savedobjects-service] [.kibana_ingest] Action failed with 'security_exception
+Mar 10 15:11:59 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:59 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 4 in 16 seconds.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.131+07:00][INFO ][savedobjects-service] [.kibana_ingest] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 8012ms.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.148+07:00][ERROR][savedobjects-service] [.kibana_analytics] Action failed with 'security_exception
+Mar 10 15:11:59 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:59 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 4 in 16 seconds.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.148+07:00][INFO ][savedobjects-service] [.kibana_analytics] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 8011ms.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.161+07:00][ERROR][savedobjects-service] [.kibana_task_manager] Action failed with 'security_exception
+Mar 10 15:11:59 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:59 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 4 in 16 seconds.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.162+07:00][INFO ][savedobjects-service] [.kibana_task_manager] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 8011ms.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.171+07:00][ERROR][savedobjects-service] [.kibana_usage_counters] Action failed with 'security_exception
+Mar 10 15:11:59 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:59 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 4 in 16 seconds.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.171+07:00][INFO ][savedobjects-service] [.kibana_usage_counters] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 8010ms.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.180+07:00][ERROR][savedobjects-service] [.kibana_security_solution] Action failed with 'security_exception
+Mar 10 15:11:59 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:11:59 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 4 in 16 seconds.
+Mar 10 15:11:59 siem-AHV kibana[3413534]: [2026-03-10T15:11:59.181+07:00][INFO ][savedobjects-service] [.kibana_security_solution] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 8012ms.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.126+07:00][ERROR][savedobjects-service] [.kibana_alerting_cases] Action failed with 'security_exception
+Mar 10 15:12:15 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:12:15 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 5 in 32 seconds.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.126+07:00][INFO ][savedobjects-service] [.kibana_alerting_cases] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 16029ms.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.139+07:00][ERROR][savedobjects-service] [.kibana] Action failed with 'security_exception
+Mar 10 15:12:15 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:12:15 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 5 in 32 seconds.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.140+07:00][INFO ][savedobjects-service] [.kibana] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 16029ms.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.150+07:00][ERROR][savedobjects-service] [.kibana_ingest] Action failed with 'security_exception
+Mar 10 15:12:15 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:12:15 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 5 in 32 seconds.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.150+07:00][INFO ][savedobjects-service] [.kibana_ingest] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 16019ms.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.161+07:00][ERROR][savedobjects-service] [.kibana_analytics] Action failed with 'security_exception
+Mar 10 15:12:15 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:12:15 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 5 in 32 seconds.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.162+07:00][INFO ][savedobjects-service] [.kibana_analytics] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 16013ms.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.173+07:00][ERROR][savedobjects-service] [.kibana_task_manager] Action failed with 'security_exception
+Mar 10 15:12:15 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:12:15 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 5 in 32 seconds.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.174+07:00][INFO ][savedobjects-service] [.kibana_task_manager] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 16012ms.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.184+07:00][ERROR][savedobjects-service] [.kibana_usage_counters] Action failed with 'security_exception
+Mar 10 15:12:15 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:12:15 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 5 in 32 seconds.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.184+07:00][INFO ][savedobjects-service] [.kibana_usage_counters] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 16013ms.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.194+07:00][ERROR][savedobjects-service] [.kibana_security_solution] Action failed with 'security_exception
+Mar 10 15:12:15 siem-AHV kibana[3413534]:         Root causes:
+Mar 10 15:12:15 siem-AHV kibana[3413534]:                 security_exception: current license is non-compliant for [security]'. Retrying attempt 5 in 32 seconds.
+Mar 10 15:12:15 siem-AHV kibana[3413534]: [2026-03-10T15:12:15.195+07:00][INFO ][savedobjects-service] [.kibana_security_solution] WAIT_FOR_YELLOW_SOURCE -> WAIT_FOR_YELLOW_SOURCE. took: 16014ms.
+root@siem-AHV:/# 
