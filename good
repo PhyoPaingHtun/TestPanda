@@ -1,0 +1,1 @@
+sudo grep -E '^(server.host|server.port|elasticsearch.hosts|elasticsearch.username|elasticsearch.password|elasticsearch.serviceAccountToken|elasticsearch.ssl.verificationMode)' /etc/kibana/kibana.yml
