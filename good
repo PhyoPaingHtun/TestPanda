@@ -5,3 +5,4 @@ sudo systemctl restart kibana
 sleep 10
 sudo journalctl -u kibana -n 80 --no-pager
 curl -I --max-time 10 http://127.0.0.1:5601
+IoHjjToqFtCI-DtKqqAM
