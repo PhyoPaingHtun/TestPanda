@@ -1,1 +1,7 @@
 sudo grep -E '^(server.host|server.port|elasticsearch.hosts|elasticsearch.username|elasticsearch.password|elasticsearch.serviceAccountToken|elasticsearch.ssl.verificationMode)' /etc/kibana/kibana.yml
+curl -k -u elastic https://127.0.0.1:9200/_license?pretty
+curl -k -u elastic -X POST https://127.0.0.1:9200/_license/start_basic?acknowledge=true
+sudo systemctl restart kibana
+sleep 10
+sudo journalctl -u kibana -n 80 --no-pager
+curl -I --max-time 10 http://127.0.0.1:5601
