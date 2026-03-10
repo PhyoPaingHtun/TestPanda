@@ -6,3 +6,4 @@ sleep 10
 sudo journalctl -u kibana -n 80 --no-pager
 curl -I --max-time 10 http://127.0.0.1:5601
 IoHjjToqFtCI-DtKqqAM
+sudo grep -E '^(cluster.name|node.name|network.host|http.port|transport.port|discovery.type|cluster.initial_master_nodes|discovery.seed_hosts)' /etc/elasticsearch/elasticsearch.yml
